@@ -6,7 +6,7 @@ interface Meeting{
     topic: string;
     startTime : string;
     duration: number;
-    createdAt: string;
+    // createdAt: string;
 }
 
 const CardComponent: React.FC<{card : Meeting}> = ({ card }) => {

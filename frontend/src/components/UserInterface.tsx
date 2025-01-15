@@ -9,7 +9,6 @@ interface Meeting {
     topic: string;
     startTime: string;
     duration: number;
-    createdAt: string;
 }
 
 interface MeetingInterfaceProps{
@@ -19,8 +18,8 @@ interface MeetingInterfaceProps{
 const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
     const  apiURL = process.env.REACT_APP_API_URL || "http://localhost:8000";
     const [meetings, setMeetings] = useState<Meeting[]>([]);
-    const [newMeeting, setNewMeeting] = useState({zoomMeetingId: "",topic: "", startTime: "", duration: 0, createdAt: ""});
-    const [updateMeeting, setUpdateMeeting] = useState({id: "",zoomMeetingId: "", topic: "", startTime: "", duration: 0, createdAt: ""});   
+    const [newMeeting, setNewMeeting] = useState({zoomMeetingId: "",topic: "", startTime: "", duration: 0});
+    const [updateMeeting, setUpdateMeeting] = useState({id: "",zoomMeetingId: "", topic: "", startTime: "", duration: 0});   
 
     const backgroundColors: {
         [key: string] : string
@@ -53,7 +52,7 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
         try {
             const response = await axios.post(`${apiURL}/api/${backendName}/meetings`, newMeeting);
             setMeetings([response.data, ...meetings]);
-            setNewMeeting({zoomMeetingId:"",topic: "", startTime: "", duration: 0, createdAt: ""});
+            setNewMeeting({zoomMeetingId:"",topic: "", startTime: "", duration: 0});
         } catch (error) {
             console.error('Error creating meeting:', error);
         }
@@ -68,12 +67,11 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
                 topic: updateMeeting.topic,
                 startTime: updateMeeting.startTime,
                 duration: updateMeeting.duration,
-                createdAt: updateMeeting.createdAt,
             });
-            setUpdateMeeting({id: "",zoomMeetingId:"", topic: "", startTime: "", duration: 0, createdAt: ""});
+            setUpdateMeeting({id: "",zoomMeetingId:"", topic: "", startTime: "", duration: 0});
             setMeetings(
                 meetings.map((meeting) => { if (meeting.id  === parseInt(updateMeeting.id)){
-                    return {...meeting, zoomMeetingId:updateMeeting.zoomMeetingId, topic: updateMeeting.topic, startTime: updateMeeting.startTime, duration: updateMeeting.duration, createdAt: updateMeeting.createdAt};
+                    return {...meeting, zoomMeetingId:updateMeeting.zoomMeetingId, topic: updateMeeting.topic, startTime: updateMeeting.startTime, duration: updateMeeting.duration};
                 }
                 return meeting;
             })
@@ -108,7 +106,7 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
             value={newMeeting.topic} 
             onChange={(e) => setNewMeeting({...newMeeting, topic: e.target.value})} />
             
-            <input type="datetime-local" placeholder="Start Time" 
+            <input type="date" placeholder="Start Time" 
             className="w-full p-2 mb-2" 
             value={newMeeting.startTime} 
             onChange={(e) => setNewMeeting({...newMeeting, startTime: e.target.value})} />
@@ -118,10 +116,10 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
             value={newMeeting.duration} 
             onChange={(e) => setNewMeeting({...newMeeting, duration: parseInt(e.target.value)})} />
 
-            <input placeholder="Created At" 
+            {/* <input placeholder="Created At" 
             className="w-full p-2 mb-2" 
             value={newMeeting.createdAt} 
-            onChange={(e) => setNewMeeting({...newMeeting, createdAt: e.target.value})} />
+            onChange={(e) => setNewMeeting({...newMeeting, createdAt: e.target.value})} /> */}
             
             <button type="submit" className={`w-full p-2 rounded text-white ${btnColor}`}>
                 Add Meeting
@@ -144,7 +142,7 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
                 onChange={(e) => setUpdateMeeting({...updateMeeting, topic: e.target.value})} 
                 className="mb-2 w-full p-2 border border-gray-300 rounded"/>
 
-                <input  type="datetime-local" placeholder="New Start Time"
+                <input  type="date" placeholder="New Start Time"
                 value={updateMeeting.startTime}
                 onChange={(e) => setUpdateMeeting({...updateMeeting, startTime: e.target.value})}
                 className="mb-2 w-full p-2 border border-gray-300 rounded" />
@@ -154,10 +152,10 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
                 onChange={(e) => setUpdateMeeting({...updateMeeting, duration: parseInt(e.target.value)})}
                 className="mb-2 w-full p-2 border border-gray-300 rounded" />
 
-                <input placeholder="New Created At"
+                {/* <input placeholder="New Created At"
                 value={updateMeeting.createdAt}
                 onChange={(e) => setUpdateMeeting({...updateMeeting, createdAt: e.target.value})}
-                className="mb-2 w-full p-2 border border-gray-300 rounded" />
+                className="mb-2 w-full p-2 border border-gray-300 rounded" /> */}
 
 
                 <button type="submit" className={`w-full p-2 rounded text-white ${btnColor}`}>

@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	"time"
 )
 
 type Meeting struct {
@@ -122,7 +123,7 @@ func createMeeting(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		result, err := db.Exec("INSERT INTO meetings (topic, start_time, duration, zoom_meeting_id, created_at) VALUES (?, ?, ?, ?, ?)", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, u.CreatedAt)
+		result, err := db.Exec("INSERT INTO meetings (topic, start_time, duration, zoom_meeting_id, created_at) VALUES (?, ?, ?, ?, ?)", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"))
 		if err != nil {
 			log.Printf("Error inserting meetings: %v", err)
 			http.Error(w, "Failed to create meeting", http.StatusInternalServerError)
