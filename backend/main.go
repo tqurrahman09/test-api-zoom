@@ -156,7 +156,7 @@ func updateMeeting(db *sql.DB) http.HandlerFunc {
 		id := vars["id"]
 
 		// Execute the update query
-		_, err := db.Exec("UPDATE meetings SET topic = ?, start_time = ?, duration = ?, zoom_meeting_id = ?, created_at = ? WHERE id = ?", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, u.CreatedAt, id)
+		_, err := db.Exec("UPDATE meetings SET topic = ?, start_time = ?, duration = ?, zoom_meeting_id = ?, created_at = ? WHERE id = ?", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"), id)
 		if err != nil {
 			log.Printf("Error updating meeting: %v", err)
 			http.Error(w, "Failed to update meeting", http.StatusInternalServerError)
@@ -185,7 +185,7 @@ func deleteMeeting(db *sql.DB) http.HandlerFunc {
 		id := vars["id"]
 
 		var u Meeting
-		err := db.QueryRow("SELECT * FROM meetings WHERE id = ?", id).Scan(&u.Id, &u.Topic, &u.StartTime, &u.Duration, &u.ZoomMeetingId, &u.CreatedAt)
+		err := db.QueryRow("SELECT * FROM meetings WHERE id = ?", id).Scan(&u.Id, &u.Topic, &u.StartTime, &u.Duration, &u.ZoomMeetingId)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			return
