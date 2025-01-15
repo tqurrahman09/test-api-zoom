@@ -128,8 +128,6 @@ const MeetingInterface: React.FC<MeetingInterfaceProps> = ({backendName}) => {
             </button>
             </form>
         
-
-
             <form onSubmit={handleUpdateMeeting} className="mb-6 p-4 bg-blue-100 rounded shadow">
                 <input placeholder="ID"
                 value={updateMeeting.id}
