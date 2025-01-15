@@ -13,9 +13,9 @@ import (
 
 type Meeting struct {
 	Id            int    `json:"id"`
-	ZoomMeetingId string `json:"zoom_meeting_id"`
+	ZoomMeetingId string `json:"zoomMeetingId"`
 	Topic         string `json:"topic"`
-	StartTime     string `json:"start_time"`
+	StartTime     string `json:"startTime"`
 	Duration      int    `json:"duration"`
 	CreatedAt     string `json:"created_at"`
 }
@@ -123,7 +123,7 @@ func createMeeting(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		result, err := db.Exec("INSERT INTO meetings (topic, start_time, duration, zoom_meeting_id, created_at) VALUES (?, ?, ?, ?, ?)", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"))
+		result, err := db.Exec("INSERT INTO meetings (topic, startTime, duration, zoomMeetingId, created_at) VALUES (?, ?, ?, ?, ?)", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"))
 		if err != nil {
 			log.Printf("Error inserting meetings: %v", err)
 			http.Error(w, "Failed to create meeting", http.StatusInternalServerError)
@@ -156,7 +156,7 @@ func updateMeeting(db *sql.DB) http.HandlerFunc {
 		id := vars["id"]
 
 		// Execute the update query
-		_, err := db.Exec("UPDATE meetings SET topic = ?, start_time = ?, duration = ?, zoom_meeting_id = ?, created_at = ? WHERE id = ?", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"), id)
+		_, err := db.Exec("UPDATE meetings SET topic = ?, startTime = ?, duration = ?, zoomMeetingId = ?, created_at = ? WHERE id = ?", u.Topic, u.StartTime, u.Duration, u.ZoomMeetingId, time.Now().Format("2006-01-02 15:04:05"), id)
 		if err != nil {
 			log.Printf("Error updating meeting: %v", err)
 			http.Error(w, "Failed to update meeting", http.StatusInternalServerError)
@@ -165,7 +165,7 @@ func updateMeeting(db *sql.DB) http.HandlerFunc {
 
 		// Retrieve the updated meeting data from the database
 		var updatedMeeting Meeting
-		err = db.QueryRow("SELECT id, topic, start_time, duration, zoom_meeting_id, created_at FROM meetings WHERE id = ?", id).Scan(&updatedMeeting.Id, &updatedMeeting.Topic, &updatedMeeting.StartTime, &updatedMeeting.Duration, &updatedMeeting.ZoomMeetingId, &updatedMeeting.CreatedAt)
+		err = db.QueryRow("SELECT id, topic, startTime, duration, zoomMeetingId, created_at FROM meetings WHERE id = ?", id).Scan(&updatedMeeting.Id, &updatedMeeting.Topic, &updatedMeeting.StartTime, &updatedMeeting.Duration, &updatedMeeting.ZoomMeetingId, &updatedMeeting.CreatedAt)
 		if err != nil {
 			log.Printf("Error retrieving updated meeting: %v", err)
 			http.Error(w, "Failed to retrieve updated meeting", http.StatusInternalServerError)
@@ -185,7 +185,7 @@ func deleteMeeting(db *sql.DB) http.HandlerFunc {
 		id := vars["id"]
 
 		var u Meeting
-		err := db.QueryRow("SELECT * FROM meetings WHERE id = ?", id).Scan(&u.Id, &u.Topic, &u.StartTime, &u.Duration, &u.ZoomMeetingId)
+		err := db.QueryRow("SELECT * FROM meetings WHERE id = ?", id).Scan(&u.Id, &u.Topic, &u.StartTime, &u.Duration, &u.ZoomMeetingId, &u.CreatedAt)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			return
